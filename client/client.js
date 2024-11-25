@@ -73,8 +73,8 @@ const ws = new WebSocket('ws://localhost:8080');
                     if (data.winner !== null) 
                         {
                         gameActive = false;
-                        status.textContent = data.winner === myPlayer ? 'You won!' : 'You lost!';
-                        } 
+                        status.textContent = data.winner === (myPlayer === 0 ? 'X' : 'O') ? 'You won!' : 'You lost!';
+                    }
                     else if (data.isDraw) 
                         {
                         gameActive = false;
