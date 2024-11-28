@@ -9,14 +9,36 @@ const ws = new WebSocket('ws://localhost:8080');
         const joinGameBtn = document.getElementById('joinGame');
         const joinGameId = document.getElementById('joinGameId');
         const gameIdDisplay = document.getElementById('gameId');
-
-        createGameBtn.addEventListener('click', () => {
+        function resetGameState() 
+        {
+            myPlayer = null;
+            currentPlayer = 0;
+            gameActive = false;
+            
+            
+            const cells = document.getElementsByClassName('cell');
+            for (let i = 0; i < cells.length; i++) 
+                {
+                cells[i].textContent = '';
+            }
+            
+            
+            status.textContent = '';
+            playerLabel.textContent = '';
+            playerLabel.style.backgroundColor = '';
+            gameIdDisplay.textContent = '';
+            gameIdDisplay.dataset.gameId = '';
+        }
+        createGameBtn.addEventListener('click', () => 
+            {
             ws.send(JSON.stringify({ type: 'create' }));
         });
 
-        joinGameBtn.addEventListener('click', () => {
+        joinGameBtn.addEventListener('click', () => 
+            {
             const gameId = joinGameId.value.trim();
-            if (gameId) {
+            if (gameId) 
+                {
                 ws.send(JSON.stringify({ type: 'join', gameId }));
             }
         });
@@ -44,6 +66,7 @@ const ws = new WebSocket('ws://localhost:8080');
             switch (data.type) 
             {
                 case 'created':
+                    resetGameState();
                     gameIdDisplay.textContent = `Game ID: ${data.gameId}`;
                     gameIdDisplay.dataset.gameId = data.gameId;
                     myPlayer = data.player;
@@ -53,6 +76,7 @@ const ws = new WebSocket('ws://localhost:8080');
                     break;
 
                 case 'joined':
+                    resetGameState();
                     gameIdDisplay.textContent = `Game ID: ${data.gameId}`;
                     gameIdDisplay.dataset.gameId = data.gameId;
                     myPlayer = data.player;
